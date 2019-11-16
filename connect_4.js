@@ -34,17 +34,25 @@ document.addEventListener("keydown", function(event){
 })
 
 function dropPiece(columnChosen, topOfColumn, color){
+    var divId = 0
+
     if(color == 1){
-        // Color is black
-        var piece = document.createElement("img");
-        piece.setAttribute("src", "black_piece.png");
+        divId = retrieveDiv(topOfColumn, columnChosen);
+        document.getElementById("C"+divId).style.backgroundColor = "red";    
     }
 
     if(color == 2){
-        // Color is red
-        var piece = document.createElement("img");
-        piece.setAttribute("src", "red_piece.png");
+        divId = retrieveDiv(topOfColumn, columnChosen);
+        document.getElementById("C"+divId).style.backgroundColor = "black";        
     }
+}
+
+function retrieveDiv(row, column){
+    divNum = 0 ;
+    divNum += (column+1) ;
+    divNum += (row*7) ;
+
+    return divNum ;
 }
 
 function evalColumnHeight(array, columnChosen){
