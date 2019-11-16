@@ -5,7 +5,7 @@ var gameBoard = [[0,0,0,0,0,0,0],
                  [0,0,0,0,0,0,0],
                  [0,0,0,0,0,0,0]];
 
-//bottom right corner of array accessed by [5][6]
+//bottom right corner of gameBoard accessed by [5][6]
 
 document.addEventListener("keydown", function(event){
     var key = event.key;
