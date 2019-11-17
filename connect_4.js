@@ -58,10 +58,13 @@ document.addEventListener("keydown", function(event){
         
     if(isGameOver == true && color == 1){
         console.log("red player has won.");
+        document.getElementById("currentPlayer").innerHTML = "Player 1 wins (Red)";
+
     }
 
     if(isGameOver == true && color == 2){
         console.log("black player has won.");
+        document.getElementById("currentPlayer").innerHTML = "Player 2 wins (Black)";
     }
 
     //player switching 
@@ -70,7 +73,10 @@ document.addEventListener("keydown", function(event){
     } else {
         color = 1;
     }
-})
+}) //end of keydown event listener
+
+var resetButton = document.getElementById("reset")
+resetButton.addEventListener("click", resetBoard);
 
 function dropPiece(columnChosen, topOfColumn, color){
     var divId = 0
@@ -80,11 +86,13 @@ function dropPiece(columnChosen, topOfColumn, color){
     if(color == 1){
         divId = retrieveDiv(topOfColumn, columnChosen);
         document.getElementById("C"+divId).style.backgroundColor = "red";    
+        document.getElementById("currentPlayer").innerHTML = "Player 2's turn (Black)";
     }
 
     if(color == 2){
         divId = retrieveDiv(topOfColumn, columnChosen);
-        document.getElementById("C"+divId).style.backgroundColor = "black";        
+        document.getElementById("C"+divId).style.backgroundColor = "black";
+        document.getElementById("currentPlayer").innerHTML = "Player 1's turn (Red)";        
     }
 }
 
@@ -288,5 +296,21 @@ function checkUpLeftDiagWin(board, row, column, color){
 function consoleBoardPrint(board){
     for(var index = 0; index < board.length; index++){
         console.log(board[index]);
+    }
+}
+
+function resetBoard(){
+        console.log("clicked reset button");
+        gameBoard = [[0,0,0,0,0,0,0],
+                     [0,0,0,0,0,0,0],
+                     [0,0,0,0,0,0,0],
+                     [0,0,0,0,0,0,0],
+                     [0,0,0,0,0,0,0],
+                     [0,0,0,0,0,0,0]];
+        color = 1;
+        document.getElementById("currentPlayer").innerHTML = "Player 1's turn (Red)"; 
+        isGameOver = false; 
+        for(divId= 1; divId<=42; divId++){
+            document.getElementById("C"+divId).style.backgroundColor = "white";
     }
 }
