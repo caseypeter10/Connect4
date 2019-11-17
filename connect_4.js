@@ -23,7 +23,6 @@ document.addEventListener("keydown", function(event){
             colTop = evalColumnHeight(gameBoard, 1);
             dropPiece(1,colTop,color);
             gameBoard[colTop][1] = color;
-
             break;
         case "3":
             colTop = evalColumnHeight(gameBoard, 2);
@@ -50,10 +49,12 @@ document.addEventListener("keydown", function(event){
             dropPiece(6,colTop,color);
             gameBoard[colTop][6] = color;
             break;
+        }
 
     console.log("color is " + color);
     consoleBoardPrint(gameBoard);
-    isGameOver = checkAllWins();
+    isGameOver = checkAllWins(gameBoard,color);
+    console.log("is game over " + isGameOver);
         
     if(isGameOver == true && color == 1){
         console.log("red player has won.");
@@ -64,14 +65,11 @@ document.addEventListener("keydown", function(event){
     }
 
     //player switching 
-    }
     if (color == 1){
         color = 2;
     } else {
         color = 1;
     }
-    
-
 })
 
 function dropPiece(columnChosen, topOfColumn, color){
@@ -129,23 +127,38 @@ involving up or left will be impossible, and will not be executed
 */
 
 //all rows and columns are zero indexed
-function checkAllWins(board, row, column, color){
+
+function checkAllWins(board, color){
     var playerWon = false;
+    console.log("in checkAllWins");
     
-    for(rows = 0; rows<6; rows++){
-        for(columns = 0; columns<7; columns++){
+    for(row = 0; row<6; row++){
+        for(column = 0; column<7; column++){
+            console.log("checking cell in row s" + row + " column " + column);
             playerWon = checkUpWin(board, row, column, color);
+            if(playerWon == true){ return playerWon;}
+
             playerWon = checkDownWin(board, row, column, color);
-            playerWon = checkLeftWin(board, row, column, color);
-            playerWon = checkRightWin(board, row, column, color);
-            playerWon = checkUpRightDiagWin(board, row, column, color);
-            playerWon = checkDownRightDiagWin(board, row, column, color);
-            playerWon = checkDownLeftDiagWin(board, row, column, color);
-            playerWon = checkUpLeftDiagWin(board, row, column, color);
+            if(playerWon == true){ return playerWon;}
             
-            if(playerWon == true){
-                return playerWon;
-            }
+            playerWon = checkLeftWin(board, row, column, color);
+            if(playerWon == true){ return playerWon;}
+
+            playerWon = checkRightWin(board, row, column, color);
+            if(playerWon == true){ return playerWon;}
+
+            playerWon = checkUpRightDiagWin(board, row, column, color);
+            if(playerWon == true){ return playerWon;}
+
+            playerWon = checkDownRightDiagWin(board, row, column, color);
+            if(playerWon == true){ return playerWon;}
+
+            playerWon = checkDownLeftDiagWin(board, row, column, color);
+            if(playerWon == true){ return playerWon;}
+
+            playerWon = checkUpLeftDiagWin(board, row, column, color);
+            if(playerWon == true){ return playerWon;}
+            
         }
     }
     return false;  
@@ -157,7 +170,14 @@ function checkUpWin(board, row, column, color){
         return;
     } else {
         //check if array contents upward from (row, column) match the color of (row, column)
-        if(board[row - 1][column] == color && board[row - 2][column] == color &&  board[row - 3][column] == color){
+        console.log("checking up win condition");
+        console.log(board[row][column]);
+        console.log(board[row - 1][column]);
+        console.log(board[row - 2][column]);
+        console.log(board[row - 3][column]);
+
+        if(board[row][column] && board[row - 1][column] == color && board[row - 2][column] == color &&  board[row - 3][column] == color){
+            console.log("u r winner");
             return true;
         } else {
             return;
@@ -170,8 +190,13 @@ function checkDownWin(board, row, column, color){
     if(row > 2){
         return;
     } else {
+        console.log("checking down win condition");
+        console.log(board[row][column]);
+        console.log(board[row + 1][column]);
+        console.log(board[row + 2][column]);
+        console.log(board[row + 3][column]);
         //check if array contents downwar from (row, column) match the color of (row, column)
-        if(board[row + 1][column] == color && board[row + 2][column] == color &&  board[row + 3][column] == color){
+        if(board[row][column] && board[row + 1][column] == color && board[row + 2][column] == color &&  board[row + 3][column] == color){
             return true;
         } else {
             return;
@@ -180,11 +205,11 @@ function checkDownWin(board, row, column, color){
 }
 
 function checkLeftWin(board, row, column, color){
-    if(col < 3){
+    if(column < 3){
         return;
     } else {
         //Check if array contents to the left of (row, column) match the color of (row, column)
-        if(board[row][column - 1] == color && board[row][column - 2] == color && board[row][column - 3] == color){
+        if(board[row][column] && board[row][column - 1] == color && board[row][column - 2] == color && board[row][column - 3] == color){
             return true;
         } else {
             return;
@@ -193,10 +218,10 @@ function checkLeftWin(board, row, column, color){
 }
 
 function checkRightWin(board, row, column, color){
-    if(col > 3){
+    if(column > 3){
         return;
     } else {
-        if(board[row][column + 1] == color && board[row][column + 2] == color && board[row][column + 3] == color){
+        if(board[row][column] && board[row][column + 1] == color && board[row][column + 2] == color && board[row][column + 3] == color){
             return true;
         } else {
             return;
@@ -210,7 +235,7 @@ function checkUpRightDiagWin(board, row, column, color){
         return;
     } else {
         //check if array contents up and to the right from (row, column) match the color of (row, column)
-        if(board[row - 1][column + 1] == color && board[row - 2][column + 2] == color &&  board[row - 3][column + 3] == color){
+        if(board[row][column] && board[row - 1][column + 1] == color && board[row - 2][column + 2] == color &&  board[row - 3][column + 3] == color){
             return true;
         } else {
             return;
@@ -224,7 +249,7 @@ function checkDownRightDiagWin(board, row, column, color){
         return;
     } else {
         //check if array contents down and to the right from (row, column) match the color of (row, column)
-        if(board[row + 1][column + 1] == color && board[row + 2][column + 2] == color &&  board[row + 3][column + 3] == color){
+        if(board[row][column] && board[row + 1][column + 1] == color && board[row + 2][column + 2] == color &&  board[row + 3][column + 3] == color){
             return true;
         } else {
             return;
@@ -238,7 +263,7 @@ function checkDownLeftDiagWin(board, row, column, color){
         return;
     } else {
         //check if array contents down and to the left from (row, column) match the color of (row, column)
-        if(board[row + 1][column - 1] == color && board[row + 2][column - 2] == color &&  board[row + 3][column - 3] == color){
+        if(board[row][column] && board[row + 1][column - 1] == color && board[row + 2][column - 2] == color &&  board[row + 3][column - 3] == color){
             return true;
         } else {
             return;
@@ -252,7 +277,7 @@ function checkUpLeftDiagWin(board, row, column, color){
         return;
     } else {
         //check if array contents up and to the left from (row, column) match the color of (row, column)
-        if(board[row - 1][column - 1] == color && board[row - 2][column - 2] == color &&  board[row - 3][column - 3] == color){
+        if(board[row][column] && board[row - 1][column - 1] == color && board[row - 2][column - 2] == color &&  board[row - 3][column - 3] == color){
             return true;
         } else {
             return;
