@@ -1,3 +1,11 @@
+#background{
+    background-color: red;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+}
+
 #C1{
     background-color: white;
     position: absolute;
@@ -420,6 +428,7 @@
 
 #board{
     position: relative;
+    left: 25%;
     bottom: 30px;
     background-image: url('Connect4Board.png');
     margin-left: 20px;
@@ -429,7 +438,7 @@
 
 #turnAndReset{
     position: relative;
-    left:20px;
+    left:41%;
     column-count: 2;
     column-gap: 10px;
     
@@ -437,7 +446,8 @@
 
 #gameName{
     position:relative;
-    left:20px;
+    left:46.5%;
+    bottom:
 }
 
 #reset {
