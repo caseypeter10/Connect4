@@ -5,7 +5,7 @@ var gameBoard = [[0,0,0,0,0,0,0],
                  [0,0,0,0,0,0,0],
                  [0,0,0,0,0,0,0]];
 
-var color = 1
+var color = 1;
 var isGameOver = false;
 
 //bottom right corner of gameBoard accessed by [5][6]
@@ -126,7 +126,7 @@ function evalColumnHeight(array, columnChosen){
 
 /* 
 The check functions below are called as the gameboard array is looped through. If
-a 1(red piece) or a 2(black piece)  is found during looping. The check win functions
+a 1(red piece) or a 2(black piece)  is found during looping, the check win functions
 will be called. If it is impossible for a win in a particular direction to occur, the 
 function will terminate early.
 
@@ -184,7 +184,7 @@ function checkUpWin(board, row, column, color){
         console.log(board[row - 2][column]);
         console.log(board[row - 3][column]);
 
-        if(board[row][column] && board[row - 1][column] == color && board[row - 2][column] == color &&  board[row - 3][column] == color){
+        if(board[row][column] == color && board[row - 1][column] == color && board[row - 2][column] == color &&  board[row - 3][column] == color){
             console.log("u r winner");
             return true;
         } else {
@@ -204,7 +204,7 @@ function checkDownWin(board, row, column, color){
         console.log(board[row + 2][column]);
         console.log(board[row + 3][column]);
         //check if array contents downwar from (row, column) match the color of (row, column)
-        if(board[row][column] && board[row + 1][column] == color && board[row + 2][column] == color &&  board[row + 3][column] == color){
+        if(board[row][column] == color && board[row + 1][column] == color && board[row + 2][column] == color &&  board[row + 3][column] == color){
             return true;
         } else {
             return;
@@ -217,7 +217,7 @@ function checkLeftWin(board, row, column, color){
         return;
     } else {
         //Check if array contents to the left of (row, column) match the color of (row, column)
-        if(board[row][column] && board[row][column - 1] == color && board[row][column - 2] == color && board[row][column - 3] == color){
+        if(board[row][column] == color && board[row][column - 1] == color && board[row][column - 2] == color && board[row][column - 3] == color){
             return true;
         } else {
             return;
@@ -229,7 +229,7 @@ function checkRightWin(board, row, column, color){
     if(column > 3){
         return;
     } else {
-        if(board[row][column] && board[row][column + 1] == color && board[row][column + 2] == color && board[row][column + 3] == color){
+        if(board[row][column] == color && board[row][column + 1] == color && board[row][column + 2] == color && board[row][column + 3] == color){
             return true;
         } else {
             return;
@@ -243,7 +243,7 @@ function checkUpRightDiagWin(board, row, column, color){
         return;
     } else {
         //check if array contents up and to the right from (row, column) match the color of (row, column)
-        if(board[row][column] && board[row - 1][column + 1] == color && board[row - 2][column + 2] == color &&  board[row - 3][column + 3] == color){
+        if(board[row][column] == color && board[row - 1][column + 1] == color && board[row - 2][column + 2] == color &&  board[row - 3][column + 3] == color){
             return true;
         } else {
             return;
@@ -257,7 +257,7 @@ function checkDownRightDiagWin(board, row, column, color){
         return;
     } else {
         //check if array contents down and to the right from (row, column) match the color of (row, column)
-        if(board[row][column] && board[row + 1][column + 1] == color && board[row + 2][column + 2] == color &&  board[row + 3][column + 3] == color){
+        if(board[row][column] == color && board[row + 1][column + 1] == color && board[row + 2][column + 2] == color &&  board[row + 3][column + 3] == color){
             return true;
         } else {
             return;
@@ -271,7 +271,7 @@ function checkDownLeftDiagWin(board, row, column, color){
         return;
     } else {
         //check if array contents down and to the left from (row, column) match the color of (row, column)
-        if(board[row][column] && board[row + 1][column - 1] == color && board[row + 2][column - 2] == color &&  board[row + 3][column - 3] == color){
+        if(board[row][column] == color && board[row + 1][column - 1] == color && board[row + 2][column - 2] == color &&  board[row + 3][column - 3] == color){
             return true;
         } else {
             return;
@@ -285,7 +285,7 @@ function checkUpLeftDiagWin(board, row, column, color){
         return;
     } else {
         //check if array contents up and to the left from (row, column) match the color of (row, column)
-        if(board[row][column] && board[row - 1][column - 1] == color && board[row - 2][column - 2] == color &&  board[row - 3][column - 3] == color){
+        if(board[row][column] == color && board[row - 1][column - 1] == color && board[row - 2][column - 2] == color &&  board[row - 3][column - 3] == color){
             return true;
         } else {
             return;
