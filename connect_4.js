@@ -107,14 +107,14 @@ document.addEventListener("keydown", function(event){
             console.log("red player has won.");
             setTimeout(function() {
                 alert("Player 1 (red) wins");
-              }, 1000);
+              }, 500);
         }
 
         if(isGameOver == true && color == 2){
             console.log("black player has won.");
             setTimeout(function() {
                 alert("Player 2 (black) wins");
-              }, 1000);
+              }, 500);
         }
 
         //player switching under PvP conditions
