@@ -4,58 +4,100 @@ var gameBoard = [[0,0,0,0,0,0,0],
                  [0,0,0,0,0,0,0],
                  [0,0,0,0,0,0,0],
                  [0,0,0,0,0,0,0]];
+//bottom right corner of gameBoard accessed by [5][6]
 
 var color = 1;
 var isGameOver = false;
 var AIPlayer = false;
+var AIToggle
 
-//bottom right corner of gameBoard accessed by [5][6]
+AIbutton = document.getElementById("AIbutton");
+AIbutton.addEventListener("click", toggleAI);
+
+colorButton = document.getElementById("colorButton");
+colorButton.addEventListener("click", toggleColor);
+    
+
+//var colorButton = document.getElementById("");
 
 document.addEventListener("keydown", function(event){
     var key = event.key;
 
     //Prevents dropping pieces if a player has won.
     if(isGameOver == false){
-        
-    
-        switch (key) {
-            case "1":
-                colTop = evalColumnHeight(gameBoard, 0);
-                dropPiece(0,colTop,color);
-                gameBoard[colTop][0] = color;
-                break;
-            case "2":
-                colTop = evalColumnHeight(gameBoard, 1);
-                dropPiece(1,colTop,color);
-                gameBoard[colTop][1] = color;
-                break;
-            case "3":
-                colTop = evalColumnHeight(gameBoard, 2);
-                dropPiece(2,colTop,color);
-                gameBoard[colTop][2] = color;
-                break;
-            case "4":
-                colTop = evalColumnHeight(gameBoard, 3);
-                dropPiece(3,colTop,color);
-                gameBoard[colTop][3] = color;
-                break;
-            case "5":
-                colTop = evalColumnHeight(gameBoard, 4);
-                dropPiece(4,colTop,color);
-                gameBoard[colTop][4] = color;
-                break;
-            case "6":
-                colTop = evalColumnHeight(gameBoard, 5);
-                dropPiece(5,colTop,color);
-                gameBoard[colTop][5] = color;
-                break;
-            case "7":
-                colTop = evalColumnHeight(gameBoard, 6);
-                dropPiece(6,colTop,color);
-                gameBoard[colTop][6] = color;
-                break;
-            }
+            switch (key) {
+                //Prevents dropping pieces if the AI is active and it is the computer's turn.
+                case "1":
+                    if(AIPlayer == true && color == 2){
+                        break;
+                    } else {
+                        colTop = evalColumnHeight(gameBoard, 0);
+                        dropPiece(0,colTop,color);
+                        gameBoard[colTop][0] = color;
+                        break;
+                    }
+                case "2":
+                    if(AIPlayer == true && color == 2){
+                        break;
+                    } else {
+                        colTop = evalColumnHeight(gameBoard, 1);
+                        dropPiece(1,colTop,color);
+                        gameBoard[colTop][1] = color;
+                        break;
+                    }
 
+                case "3":
+                    if(AIPlayer == true && color == 2){
+                        break;
+                    } else {
+                        colTop = evalColumnHeight(gameBoard, 2);
+                        dropPiece(2,colTop,color);
+                        gameBoard[colTop][2] = color;
+                        break;
+                    }
+
+                case "4":
+                    if(AIPlayer == true && color == 2){
+                        break;
+                    } else {
+                        colTop = evalColumnHeight(gameBoard, 3);
+                        dropPiece(3,colTop,color);
+                        gameBoard[colTop][3] = color;
+                        break;
+                    }
+                    
+                case "5":
+                    if(AIPlayer == true && color == 2){
+                        break;
+                    } else {
+                        colTop = evalColumnHeight(gameBoard, 4);
+                        dropPiece(4,colTop,color);
+                        gameBoard[colTop][4] = color;
+                        break;
+                    }
+                
+                case "6":
+                    if(AIPlayer == true && color == 2){
+                        break;
+                    } else {
+                        colTop = evalColumnHeight(gameBoard, 5);
+                        dropPiece(5,colTop,color);
+                        gameBoard[colTop][5] = color;
+                        break;
+                    }
+                    
+                case "7":
+                    if(AIPlayer == true && color == 2){
+                        break;
+                    } else {
+                        colTop = evalColumnHeight(gameBoard, 6);
+                        dropPiece(6,colTop,color);
+                        gameBoard[colTop][6] = color;
+                        break;
+                }
+            }        
+        } 
+    
         console.log("color is " + color);
         consoleBoardPrint(gameBoard);
         isGameOver = checkAllWins(gameBoard,color);
@@ -63,25 +105,62 @@ document.addEventListener("keydown", function(event){
             
         if(isGameOver == true && color == 1){
             console.log("red player has won.");
-            alert("Player 1 (red) wins");
+            setTimeout(function() {
+                alert("Player 1 (red) wins");
+              }, 1000);
         }
 
         if(isGameOver == true && color == 2){
             console.log("black player has won.");
-            alert("Player 2 (black) wins");
+            setTimeout(function() {
+                alert("Player 2 (black) wins");
+              }, 1000);
         }
 
-        //player switching 
+        //player switching under PvP conditions
         if (color == 1){
+            console.log("switching color to 2");
             color = 2;
         } else {
-            color = 1;
+            // Only allowing the switching from player 2 to player 1 on keydown if there is no AI player
+            if(AIPlayer == false){
+                color = 1;
+            }
         }
-    }
-}) //end of keydown event listener
+        console.log("At end of listener color is: " + color);
+        console.log("At end of listener AI player is " + AIPlayer);
+        while(AIPlayer == true && color == 2){
+            console.log("in AI loop");
+            allColumnTops = getColumnTops(gameBoard);
+            console.log("All column tops is " + allColumnTops);
+            AIMove = checkBlockingAndWinningOpportunities(allColumnTops, gameBoard, color);
+            console.log("planned AI move " + AIMove);
+            dropPiece(AIMove, allColumnTops[AIMove], color);
+            console.log("AI manip game board array row: " + allColumnTops[AIMove] + "column: " + AIMove);
+            gameBoard[allColumnTops[AIMove]][AIMove] = 2;
+            consoleBoardPrint(gameBoard);
 
-var resetButton = document.getElementById("reset")
+            isGameOver = checkAllWins(gameBoard,color);
+            if(isGameOver == true){
+                setTimeout(function() {
+                    alert("Player 2 (black) wins");
+                }, 1000);
+                
+            }
+
+            color = 1;
+            
+        }
+    })
+    
+
+ //end of keydown event listener
+
+var resetButton = document.getElementById("reset");
 resetButton.addEventListener("click", resetBoard);
+
+//AI loop that only fires if the AI player is activated and it is player 2's turn
+
 
 function dropPiece(columnChosen, topOfColumn, color){
     var divId = 0
@@ -96,6 +175,8 @@ function dropPiece(columnChosen, topOfColumn, color){
 
     if(color == 2){
         divId = retrieveDiv(topOfColumn, columnChosen);
+        console.log("divId is: " + divId);
+
         document.getElementById("C"+divId).style.backgroundColor = "black";
         document.getElementById("currentPlayer").innerHTML = "Player 1's turn (Red)";        
     }
@@ -105,6 +186,9 @@ function retrieveDiv(row, column){
     divNum = 0 ;
     divNum += (column+1) ;
     divNum += (row*7) ;
+
+    console.log("column " + column);
+    console.log("row " + column); 
     console.log("divNum " + divNum);
 
     return divNum ;
@@ -114,7 +198,7 @@ function evalColumnHeight(array, columnChosen){
     columnTopFound = false;
     rowCounter = 5;
     columnTop = 0;
-    console.log("column chosen " + columnChosen);
+    console.log("column evaluated " + columnChosen);
 
     while(columnTopFound == false){
         if(array[rowCounter][columnChosen] == 0){
@@ -124,8 +208,6 @@ function evalColumnHeight(array, columnChosen){
             rowCounter--;
         }
     }
-    console.log(columnTopFound);
-    console.log(rowCounter);
     return columnTop;
 }
 
@@ -144,56 +226,80 @@ involving up or left will be impossible, and will not be executed
 function getColumnTops(gameBoardArray){
     columnTopList = [0,0,0,0,0,0,0];
     for(column = 0; column<7; column++){
-        columnTopList[column] = evalColumnHeight();
+        columnTopList[column] = evalColumnHeight(gameBoardArray, column);
     }
+    console.log("column tops is: " + columnTopList)
     return columnTopList;
 }
 
 function checkBlockingAndWinningOpportunities(columnTopList, gameBoardArray, color){
+    var column = 0;
     for(column = 0; column<7; column++){
         //getting winning opportunities
-        var winningBoardArray = gameBoardArray;
-
+        console.log("column scanned in AI " + column);
+        let winningBoardArray = JSON.parse(JSON.stringify(gameBoardArray));
         winningBoardArray[columnTopList[column]][column] = color;
+        console.log("winning Board Array");
+        consoleBoardPrint(winningBoardArray);
+
+        console.log("Game Board Array is");
+        consoleBoardPrint(gameBoardArray);
+        
         var winningOpportunity = checkAllWins(winningBoardArray, color);
+        console.log("Winning opportunity is: " + winningOpportunity);
+
         if (winningOpportunity == true){
             //if placing a piece in the "scanned" column, and a win would result, the column will be returned.
+            console.log("column chosen " + column);
             return column;
         }
+    }
+    
+    for(column = 0; column<7; column++){
 
-        if(winningOpportunity == False){
-            if(color == 1){
-                color = 2;
-            } else {
+        if(winningOpportunity == false){
                 color = 1;
             }
 
-            var blockingBoardArray = gameBoardArray;
-            var blockingOpportunity = checkAllWins(blockingBoardArray);
+            console.log("column is " + column);
+            let blockingBoardArray = JSON.parse(JSON.stringify(gameBoardArray));
+            
+            blockingBoardArray[columnTopList[column]][column] = color;
+            console.log("blocking Board Array");
+            consoleBoardPrint(blockingBoardArray);
+            console.log("color before blocking check " + color);
+            var blockingOpportunity = checkAllWins(blockingBoardArray, color);
+            console.log("Is there a blocking opportunity: " + blockingOpportunity);
+            color = 2;
             
             //if placing a piece in the "scanned" column, and a win would be blocked, the column will be returned.
             if (blockingOpportunity == true){
+                console.log("column chosen: " + column);
                 return column;
-            } else {
-                //if no blocking or winning opportunities are available, select
-                return Math.floor((Math.random() * 7) + 1);
+                } else {
+                    //if no blocking or winning opportunities are available, select random move.   
+                    if(column == 6){
+                        column = Math.floor((Math.random() * 7));
+                        console.log("column chosen: " + column);
+                        return column;
+                }
             }
         }
     }
-}
 
 function checkAllWins(board, color){
     var playerWon = false;
     console.log("in checkAllWins");
+    console.log("color in checkAllWins: " + color);
     
     for(row = 0; row<6; row++){
         for(column = 0; column<7; column++){
             
             if(board[row][column] != 0){
-                console.log("checking cell in row s" + row + " column " + column);
+                console.log("checking cell in row s " + row + " column " + column);
                 playerWon = checkUpWin(board, row, column, color);
                 if(playerWon == true){ return playerWon;}
-
+                
                 playerWon = checkDownWin(board, row, column, color);
                 if(playerWon == true){ return playerWon;}
                 
@@ -226,11 +332,11 @@ function checkUpWin(board, row, column, color){
         return;
     } else {
         //check if array contents upward from (row, column) match the color of (row, column)
-        console.log("checking up win condition");
-        console.log(board[row][column]);
-        console.log(board[row - 1][column]);
-        console.log(board[row - 2][column]);
-        console.log(board[row - 3][column]);
+        //console.log("checking up win condition");
+        //console.log(board[row][column]);
+        //console.log(board[row - 1][column]);
+        //console.log(board[row - 2][column]);
+        //console.log(board[row - 3][column]);
 
         if(board[row][column] == color && board[row - 1][column] == color && board[row - 2][column] == color &&  board[row - 3][column] == color){
             console.log("u r winner");
@@ -277,7 +383,14 @@ function checkRightWin(board, row, column, color){
     if(column > 3){
         return;
     } else {
+        console.log("checking right win condition.");
+        console.log(board[row][column]);
+        console.log(board[row][column + 1]);
+        console.log(board[row][column + 2]);
+        console.log(board[row][column + 3]);
+
         if(board[row][column] == color && board[row][column + 1] == color && board[row][column + 2] == color && board[row][column + 3] == color){
+            console.log("right win activated");
             return true;
         } else {
             return;
@@ -360,5 +473,28 @@ function resetBoard(){
         isGameOver = false; 
         for(divId= 1; divId<=42; divId++){
             document.getElementById("C"+divId).style.backgroundColor = "white";
+    }
+}
+
+function toggleAI(){
+    console.log("toggling AI");
+    console.log("AI before toggle " + AIPlayer);
+    if(AIPlayer == false){
+        AIPlayer = true;
+        console.log("AI after toggle " + AIPlayer);
+        return;
+    } else {
+        console.log("AI after toggle " + AIPlayer);
+        AIPlayer = false;
+        return;
+    }
+}
+
+function toggleColor(){
+    background = document.getElementById("background");
+    if(background.style.backgroundColor == "red"){
+        background.style.backgroundColor = "green";
+    } else {
+        background.style.backgroundColor = "red";
     }
 }
